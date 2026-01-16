@@ -84,6 +84,24 @@ El contenedor de MariaDB está configurado con las siguientes credenciales (defi
 
 Coloca tu código en la carpeta `development/`. Esta carpeta está montada en `/var/www/html/demo` dentro del contenedor web.
 
+### Selección de Framework
+
+El entorno soporta la creación automática de proyectos Symfony o Laravel. Para configurarlo, añade la variable de entorno `FRAMEWORK` en el archivo `docker-compose.yml`:
+
+```yaml
+services:
+  web:
+    environment:
+      - FRAMEWORK=laravel  # Opciones: symfony, laravel, none
+```
+
+**Valores disponibles:**
+- `symfony` - Crea automáticamente un proyecto Symfony 6.4
+- `laravel` - Crea automáticamente un proyecto Laravel con Filament y Livewire preinstalados
+- `none` (por defecto) - No crea ningún proyecto, usa tu propio código en `development/`
+
+**Nota:** La creación del proyecto solo ocurre si no existe un archivo `composer.json` en el directorio de desarrollo.
+
 ### Personalización
 
 Puedes modificar:

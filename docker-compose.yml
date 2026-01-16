@@ -2,6 +2,8 @@ services:
   web:
     build:
       context: ./web
+    environment:
+      - FRAMEWORK=laravel  # o symfony, o none
     ports:
       - "80:80"
     volumes:
