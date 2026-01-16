@@ -84,6 +84,24 @@ The MariaDB container is configured with the following credentials (defined in `
 
 Place your code in the `development/` folder. This folder is mounted at `/var/www/html/demo` inside the web container.
 
+### Framework Selection
+
+The environment supports the automatic creation of Symfony or Laravel projects. To configure it, add the `FRAMEWORK` environment variable to the `docker-compose.yml` file:
+
+```yaml
+services:
+  web:
+    environment:
+      - FRAMEWORK=laravel  # Opciones: symfony, laravel, none
+```
+
+**Available values:**
+- `symfony` - Automatically creates a Symfony 6.4 project
+- `laravel` - Automatically creates a Laravel project with Filament and Livewire pre-installed
+- `none` (default) - Don't create any projects, use your own code in `development/`
+
+**Note:** Project creation only occurs if a `composer.json` file does not exist in the development directory.
+
 ### Personalization
 
 You can modify:
