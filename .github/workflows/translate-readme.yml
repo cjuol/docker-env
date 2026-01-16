@@ -32,17 +32,43 @@ jobs:
         run: |
           python - <<'EOF'
           from deep_translator import GoogleTranslator
+          import re
           
           with open('README.md', 'r', encoding='utf-8') as f:
               content = f.read()
           
-          # Traducir en bloques para evitar límites de caracteres
           translator = GoogleTranslator(source='es', target='en')
           lines = content.split('\n')
           translated_lines = []
+          in_code_block = False
           
           for line in lines:
-              if line.strip() and not line.startswith('```') and not line.startswith('#'):
+              # Detectar bloques de código
+              if line.strip().startswith('```'):
+                  in_code_block = not in_code_block
+                  translated_lines.append(line)
+                  continue
+              
+              # No traducir dentro de bloques de código
+              if in_code_block:
+                  translated_lines.append(line)
+                  continue
+              
+              # Traducir encabezados (mantener los #)
+              if line.strip().startswith('#'):
+                  match = re.match(r'^(#+\s*)', line)
+                  if match:
+                      header_prefix = match.group(1)
+                      text_to_translate = line[len(header_prefix):]
+                      try:
+                          translated = translator.translate(text_to_translate)
+                          translated_lines.append(header_prefix + (translated if translated is not None else text_to_translate))
+                      except:
+                          translated_lines.append(line)
+                  else:
+                      translated_lines.append(line)
+              # Traducir texto normal
+              elif line.strip():
                   try:
                       translated = translator.translate(line)
                       translated_lines.append(translated if translated is not None else line)

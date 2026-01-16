@@ -1,8 +1,8 @@
-# Plantilla de Proyecto
+# Entorno de Desarrollo Docker con PHP y MariaDB
 
 ## Descripción
 
-Este es un repositorio plantilla diseñado para iniciar nuevos proyectos de manera rápida y estandarizada.
+Este repositorio proporciona un entorno de desarrollo completamente containerizado con Docker, ideal para proyectos PHP. Incluye Apache con PHP 8.3, MariaDB, Composer y PHPUnit preconfigurados, permitiéndote comenzar a desarrollar inmediatamente sin preocuparte por la configuración del entorno.
 
 ## Requisitos Previos
 
@@ -20,16 +20,36 @@ git clone https://github.com/cjuol/docker-env.git
 # Navega al directorio
 cd docker-env
 
-# Instala las dependencias
-[comandos de instalación]
+# Levanta los contenedores
+docker-compose up -d
+
+# Verifica que los contenedores estén corriendo
+docker-compose ps
 ```
 
 ## Uso
 
 ```bash
-# Instrucciones básicas de uso
-[comandos principales]
+# Iniciar los contenedores
+docker-compose up -d
+
+# Detener los contenedores
+docker-compose down
+
+# Ver logs del contenedor web
+docker logs -f docker-env-web-1
+
+# Acceder al contenedor web
+docker exec -it docker-env-web-1 bash
+
+# Ejecutar comandos de Composer
+docker exec docker-env-web-1 composer install
+
+# Ejecutar tests con PHPUnit
+docker exec docker-env-web-1 phpunit
 ```
+
+Una vez iniciados los contenedores, puedes acceder a tu aplicación en: `http://localhost`
 
 ## Estructura del Proyecto
 
@@ -48,7 +68,28 @@ cd docker-env
 
 ## Configuración
 
-Describe aquí las configuraciones necesarias para el proyecto.
+### Base de Datos
+
+El contenedor de MariaDB está configurado con las siguientes credenciales (definidas en `docker-compose.yml`):
+
+- **Host:** `db`
+- **Puerto:** `3306`
+- **Base de datos:** `demo_db`
+- **Usuario:** `demo_user`
+- **Contraseña:** `demo_password`
+- **Usuario root:** `root`
+- **Contraseña root:** `example`
+
+### Directorio de Desarrollo
+
+Coloca tu código en la carpeta `development/`. Esta carpeta está montada en `/var/www/html/demo` dentro del contenedor web.
+
+### Personalización
+
+Puedes modificar:
+- `web/Dockerfile`: Para agregar extensiones PHP adicionales o herramientas
+- `web/entrypoint.sh`: Para personalizar la inicialización del contenedor
+- `docker-compose.yml`: Para ajustar puertos, variables de entorno o agregar servicios
 
 ## Contribuir
 
