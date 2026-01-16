@@ -66,4 +66,6 @@ Las contribuciones son bienvenidas. Por favor:
 
 ## Contacto
 
-[Información de contacto o enlaces relevantes]
+**Cristobal Jurado Oller** - [@Cjuol](https://github.com/Cjuol) - c.jurado.oller@gmail.com
+
+Repositorio: [https://github.com/cjuol/docker-env](https://github.com/cjuol/docker-env)

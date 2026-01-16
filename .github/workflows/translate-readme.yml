@@ -44,7 +44,8 @@ jobs:
           for line in lines:
               if line.strip() and not line.startswith('```') and not line.startswith('#'):
                   try:
-                      translated_lines.append(translator.translate(line))
+                      translated = translator.translate(line)
+                      translated_lines.append(translated if translated is not None else line)
                   except:
                       translated_lines.append(line)
               else:
