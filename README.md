@@ -6,13 +6,16 @@ Este es un repositorio plantilla diseñado para iniciar nuevos proyectos de mane
 
 ## Requisitos Previos
 
-- [Lista los requisitos necesarios]
+- Docker Engine 20.10 o superior
+- Docker Compose v2.0 o superior
+- Git
+- Acceso a puertos 80 (web) y 3306 (base de datos)
 
 ## Instalación
 
 ```bash
 # Clona el repositorio
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/cjuol/docker-env.git
 
 # Navega al directorio
 cd docker-env
