@@ -35,8 +35,15 @@ cd docker-env
 
 ```
 .
-├── [directorio/archivo principal]
-└── README.md
+├── .github/
+│   └── workflows/
+│       └── translate-readme.yml    # Workflow para traducir README automáticamente
+├── development/                     # Carpeta para el código de tu proyecto en desarrollo
+├── web/                            # Configuración del contenedor web
+│   ├── Dockerfile                  # Imagen Docker con PHP 8.3 + Apache
+│   └── entrypoint.sh              # Script de inicialización del contenedor
+├── docker-compose.yml             # Orquestación de servicios (web + db)
+└── README.md                      # Este archivo
 ```
 
 ## Configuración
