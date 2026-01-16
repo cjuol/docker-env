@@ -1,76 +1,102 @@
-# Entorno de Desarrollo Docker con PHP y MariaDB
+# [Nombre de tu Proyecto]
 
 ## Descripción
 
-Este repositorio proporciona un entorno de desarrollo completamente containerizado con Docker, ideal para proyectos PHP. Incluye Apache con PHP 8.3, MariaDB, Composer y PHPUnit preconfigurados, permitiéndote comenzar a desarrollar inmediatamente sin preocuparte por la configuración del entorno.
+[Describe aquí tu proyecto: qué hace, para qué sirve, problemas que resuelve, etc.]
+
+## Características
+
+- [Característica 1]
+- [Característica 2]
+- [Característica 3]
+
+## Tecnologías Utilizadas
+
+- PHP 8.3
+- MariaDB
+- [Otras tecnologías que uses en tu proyecto]
 
 ## Requisitos Previos
 
 - Docker Engine 20.10 o superior
 - Docker Compose v2.0 o superior
 - Git
-- Acceso a puertos 80 (web) y 3306 (base de datos)
 
-## Instalación
+## Instalación y Configuración
 
-```bash
-# Clona el repositorio
-git clone https://github.com/cjuol/docker-env.git
+1. **Clona este repositorio**
+   ```bash
+   git clone [URL-DE-TU-REPOSITORIO]
+   cd [nombre-directorio]
+   ```
 
-# Navega al directorio
-cd docker-env
+2. **Configura las variables de entorno**
+   
+   Edita el archivo [docker-compose.yml](docker-compose.yml) y modifica las credenciales de la base de datos según tus necesidades:
+   - Base de datos: `demo_db` → Cambia a tu nombre de BD
+   - Usuario: `demo_user` → Cambia a tu usuario
+   - Contraseña: `demo_password` → Cambia a tu contraseña
 
-# Levanta los contenedores
-docker-compose up -d
+3. **Inicia los contenedores**
+   ```bash
+   docker-compose up -d
+   ```
 
-# Verifica que los contenedores estén corriendo
-docker-compose ps
-```
+4. **Accede a la aplicación**
+   
+   Abre tu navegador en: `http://localhost`
 
 ## Uso
 
-```bash
-# Iniciar los contenedores
-docker-compose up -d
-
-# Detener los contenedores
-docker-compose down
-
-# Ver logs del contenedor web
-docker logs -f docker-env-web-1
-
-# Acceder al contenedor web
-docker exec -it docker-env-web-1 bash
-
-# Ejecutar comandos de Composer
-docker exec docker-env-web-1 composer install
-
-# Ejecutar tests con PHPUnit
-docker exec docker-env-web-1 phpunit
-```
-
-Una vez iniciados los contenedores, puedes acceder a tu aplicación en: `http://localhost`
+[Explica aquí cómo usar tu aplicación: funcionalidades principales, ejemplos de uso, capturas de pantalla si es necesario]
 
 ## Estructura del Proyecto
 
 ```
 .
-├── .github/
-│   └── workflows/
-│       └── translate-readme.yml    # Workflow para traducir README automáticamente
-├── development/                     # Carpeta para el código de tu proyecto en desarrollo
-├── web/                            # Configuración del contenedor web
-│   ├── Dockerfile                  # Imagen Docker con PHP 8.3 + Apache
-│   └── entrypoint.sh              # Script de inicialización del contenedor
-├── docker-compose.yml             # Orquestación de servicios (web + db)
-└── README.md                      # Este archivo
+├── development/           # Código fuente de tu aplicación
+├── web/                  # Configuración del entorno Docker
+├── docker-compose.yml    # Orquestación de servicios
+└── README.md
 ```
 
-## Configuración
+## Contribuir
 
-### Base de Datos
+[Explica cómo otros pueden contribuir a tu proyecto]
 
-El contenedor de MariaDB está configurado con las siguientes credenciales (definidas en `docker-compose.yml`):
+## Licencia
+
+[Especifica la licencia de tu proyecto]
+
+## Contacto
+
+[Tu nombre] - [Tu usuario de GitHub] - [Tu email]
+
+---
+
+# 📦 Guía del Entorno de Desarrollo Docker
+
+Este proyecto utiliza un entorno de desarrollo completamente containerizado con Docker. A continuación se detalla cómo funciona y cómo utilizarlo.
+
+## Componentes del Entorno
+
+### Servicios Docker
+
+El entorno incluye dos servicios principales definidos en [docker-compose.yml](docker-compose.yml):
+
+1. **Web (Apache + PHP 8.3)**
+   - Puerto: 80
+   - Incluye: Composer, PHPUnit, extensiones PHP comunes
+   - Directorio de trabajo: `/var/www/html/demo`
+
+2. **Base de Datos (MariaDB)**
+   - Puerto: 3306
+   - Versión: MariaDB (última estable)
+   - Persistencia: Volumen Docker
+
+### Credenciales de Base de Datos
+
+Las credenciales por defecto están en [docker-compose.yml](docker-compose.yml):
 
 - **Host:** `db`
 - **Puerto:** `3306`
@@ -80,13 +106,69 @@ El contenedor de MariaDB está configurado con las siguientes credenciales (defi
 - **Usuario root:** `root`
 - **Contraseña root:** `example`
 
-### Directorio de Desarrollo
+⚠️ **Importante:** Cambia estas credenciales antes de usar en producción.
 
-Coloca tu código en la carpeta `development/`. Esta carpeta está montada en `/var/www/html/demo` dentro del contenedor web.
+## Comandos Docker Útiles
+
+### Gestión de Contenedores
+
+```bash
+# Iniciar los contenedores
+docker-compose up -d
+
+# Detener los contenedores
+docker-compose down
+
+# Reiniciar los contenedores
+docker-compose restart
+
+# Ver estado de los contenedores
+docker-compose ps
+
+# Ver logs en tiempo real
+docker-compose logs -f
+
+# Ver logs solo del servicio web
+docker logs -f docker-env-web-1
+```
+
+### Acceso a los Contenedores
+
+```bash
+# Acceder al contenedor web (bash interactivo)
+docker exec -it docker-env-web-1 bash
+
+# Acceder al contenedor de base de datos
+docker exec -it docker-env-db-1 bash
+```
+
+### Comandos de Desarrollo
+
+```bash
+# Ejecutar Composer
+docker exec docker-env-web-1 composer install
+docker exec docker-env-web-1 composer update
+docker exec docker-env-web-1 composer require [paquete]
+
+# Ejecutar PHPUnit
+docker exec docker-env-web-1 phpunit
+docker exec docker-env-web-1 phpunit --filter [test-name]
+
+# Ejecutar scripts PHP
+docker exec docker-env-web-1 php script.php
+
+# Ejecutar comandos de Symfony (si usas Symfony)
+docker exec docker-env-web-1 php bin/console [comando]
+
+# Ejecutar comandos de Laravel (si usas Laravel)
+docker exec docker-env-web-1 php artisan [comando]
+```
+
+## Configuración del Entorno
 
 ### Selección de Framework
 
-El entorno soporta la creación automática de proyectos Symfony o Laravel. Para configurarlo, añade la variable de entorno `FRAMEWORK` en el archivo `docker-compose.yml`:
+El entorno soporta la creación automática de proyectos. Edita [docker-compose.yml](docker-compose.yml) y añade la variable `FRAMEWORK`:
 
 ```yaml
 services:
@@ -95,36 +177,84 @@ services:
       - FRAMEWORK=laravel  # Opciones: symfony, laravel, none
 ```
 
-**Valores disponibles:**
+**Opciones disponibles:**
 - `symfony` - Crea automáticamente un proyecto Symfony 6.4
-- `laravel` - Crea automáticamente un proyecto Laravel con Filament y Livewire preinstalados
-- `none` (por defecto) - No crea ningún proyecto, usa tu propio código en `development/`
+- `laravel` - Crea automáticamente un proyecto Laravel con Filament y Livewire
+- `none` (por defecto) - No crea ningún proyecto automáticamente
 
-**Nota:** La creación del proyecto solo ocurre si no existe un archivo `composer.json` en el directorio de desarrollo.
+**Nota:** La creación solo ocurre si no existe `composer.json` en `development/`
 
-### Personalización
+### Directorio de Desarrollo
 
-Puedes modificar:
-- `web/Dockerfile`: Para agregar extensiones PHP adicionales o herramientas
-- `web/entrypoint.sh`: Para personalizar la inicialización del contenedor
-- `docker-compose.yml`: Para ajustar puertos, variables de entorno o agregar servicios
+- **Local:** `./development/`
+- **Contenedor:** `/var/www/html/demo`
 
-## Contribuir
+Todo el código que escribas en `development/` se sincroniza automáticamente con el contenedor.
 
-Las contribuciones son bienvenidas. Por favor:
+### Personalización Avanzada
 
-1. Haz fork del proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+#### Agregar Extensiones PHP
 
-## Licencia
+Edita [web/Dockerfile](web/Dockerfile) y añade las extensiones necesarias:
 
-[Especifica la licencia del proyecto]
+```dockerfile
+RUN docker-php-ext-install [extension-name]
+```
 
-## Contacto
+#### Modificar Inicialización
 
-**Cristobal Jurado Oller** - [@Cjuol](https://github.com/Cjuol) - c.jurado.oller@gmail.com
+Edita [web/entrypoint.sh](web/entrypoint.sh) para personalizar lo que ocurre al iniciar el contenedor.
 
-Repositorio: [https://github.com/cjuol/docker-env](https://github.com/cjuol/docker-env)
+#### Cambiar Puertos
+
+Edita [docker-compose.yml](docker-compose.yml):
+
+```yaml
+services:
+  web:
+    ports:
+      - "8080:80"  # Cambiar puerto 80 a 8080
+```
+
+## Solución de Problemas
+
+### Los contenedores no inician
+
+```bash
+# Ver logs detallados
+docker-compose logs
+
+# Reconstruir los contenedores
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+### Error de permisos en archivos
+
+```bash
+# Desde dentro del contenedor web
+docker exec -it docker-env-web-1 bash
+chown -R www-data:www-data /var/www/html/demo
+```
+
+### Puerto ya en uso
+
+Si el puerto 80 o 3306 ya está en uso, cambia los puertos en [docker-compose.yml](docker-compose.yml).
+
+### Base de datos no conecta
+
+Verifica que:
+- El contenedor de base de datos esté corriendo: `docker-compose ps`
+- Las credenciales en tu código coincidan con [docker-compose.yml](docker-compose.yml)
+- Uses `db` como host, no `localhost`
+
+## Recursos Adicionales
+
+- [Documentación de Docker](https://docs.docker.com/)
+- [Documentación de Docker Compose](https://docs.docker.com/compose/)
+- [PHP Docker Official Image](https://hub.docker.com/_/php)
+
+---
+
+**Plantilla creada por:** Cristobal Jurado Oller - [@Cjuol](https://github.com/Cjuol)  
+**Repositorio de la plantilla:** [https://github.com/cjuol/docker-env](https://github.com/cjuol/docker-env)
