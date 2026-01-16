@@ -9,8 +9,12 @@ on:
 jobs:
   translate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto Translate
         uses: offensive-vk/auto-translate@v1
@@ -25,8 +29,8 @@ jobs:
           
       - name: Commit changes
         run: |
-          git config --global user.name 'Traductor Bot'
-          git config --global user.email 'bot@noreply.github.com'
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git add README.en.md
-          git commit -m "Auto-translated README to English"
+          git commit -m "Auto-translated README to English" || echo "No changes to commit"
           git push
