@@ -1,0 +1,32 @@
+name: Translate README
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'README.md' # Solo se activa si tocas el readme
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Auto Translate
+        uses: offensive-vk/auto-translate@v1
+        with:
+          # Archivo origen
+          source_file: 'README.md'
+          # Archivo destino (se creará solo)
+          output_file: 'README.en.md'
+          # Idiomas (en tu caso de Español 'es' a Inglés 'en')
+          source_language: 'es'
+          target_language: 'en'
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Traductor Bot'
+          git config --global user.email 'bot@noreply.github.com'
+          git add README.en.md
+          git commit -m "Auto-translated README to English"
+          git push
