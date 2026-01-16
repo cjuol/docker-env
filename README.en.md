@@ -1,17 +1,17 @@
-# Plantilla de Proyecto
+# Docker Development Environment with PHP and MariaDB
 
-## Descripción
+## Description
 
-This is a template repository designed to start new projects quickly and in a standardized way.
+This repository provides a fully containerized development environment with Docker, ideal for PHP projects. It includes Apache with PHP 8.3, MariaDB, Composer and PHPUnit pre-configured, allowing you to start developing immediately without worrying about environment configuration.
 
-## Requisitos Previos
+## Prerequisites
 
 - Docker Engine 20.10 or higher
 - Docker Compose v2.0 or higher
 -Git
 - Access to ports 80 (web) and 3306 (database)
 
-## Instalación
+## Facility
 
 ```bash
 # Clona el repositorio
@@ -20,37 +20,78 @@ git clone https://github.com/cjuol/docker-env.git
 # Navega al directorio
 cd docker-env
 
-# Instala las dependencias
-[installation commands]
+# Levanta los contenedores
+docker-compose up -d
+
+# Verifica que los contenedores estén corriendo
+docker-compose ps
 ```
 
-## Uso
+## Use
 
 ```bash
-# Instrucciones básicas de uso
-[main commands]
+# Iniciar los contenedores
+docker-compose up -d
+
+# Detener los contenedores
+docker-compose down
+
+# Ver logs del contenedor web
+docker logs -f docker-env-web-1
+
+# Acceder al contenedor web
+docker exec -it docker-env-web-1 bash
+
+# Ejecutar comandos de Composer
+docker exec docker-env-web-1 composer install
+
+# Ejecutar tests con PHPUnit
+docker exec docker-env-web-1 phpunit
 ```
 
-## Estructura del Proyecto
+Once the containers are started, you can access your application at: `http://localhost`
+
+## Project Structure
 
 ```
 .
 ├── .github/
-│ └── workflows/
-│ └── translate-readme.yml # Workflow to translate README automatically
-├── development/ # Folder for the code of your developing project
-├── web/ # Web container configuration
-│ ├── Dockerfile # Docker image with PHP 8.3 + Apache
-│ └── entrypoint.sh # Container initialization script
-├── docker-compose.yml # Service orchestration (web + db)
-└── README.md # This file
+│   └── workflows/
+│       └── translate-readme.yml    # Workflow para traducir README automáticamente
+├── development/                     # Carpeta para el código de tu proyecto en desarrollo
+├── web/                            # Configuración del contenedor web
+│   ├── Dockerfile                  # Imagen Docker con PHP 8.3 + Apache
+│   └── entrypoint.sh              # Script de inicialización del contenedor
+├── docker-compose.yml             # Orquestación de servicios (web + db)
+└── README.md                      # Este archivo
 ```
 
-## Configuración
+## Configuration
 
-Describes the configurations required for the project here.
+### Database
 
-## Contribuir
+The MariaDB container is configured with the following credentials (defined in `docker-compose.yml`):
+
+- **Host:** `db`
+- **Port:** `3306`
+- **Database:** `demo_db`
+- **User:** `demo_user`
+- **Password:** `demo_password`
+- **root user:** `root`
+- **root password:** `example`
+
+### Development Directory
+
+Place your code in the `development/` folder. This folder is mounted at `/var/www/html/demo` inside the web container.
+
+### Personalization
+
+You can modify:
+- `web/Dockerfile`: To add additional PHP extensions or tools
+- `web/entrypoint.sh`: To customize container initialization
+- `docker-compose.yml`: To adjust ports, environment variables or add services
+
+## Contribute
 
 Contributions are welcome. Please:
 
@@ -60,11 +101,11 @@ Contributions are welcome. Please:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## Licencia
+## License
 
 [Specifies the project license]
 
-## Contacto
+## Contact
 
 **Cristobal Jurado Oller** - [@Cjuol](https://github.com/Cjuol) - c.jurado.oller@gmail.com
 
