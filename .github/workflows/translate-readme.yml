@@ -2,35 +2,64 @@ name: Translate README
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
-      - 'README.md' # Solo se activa si tocas el readme
+      - 'README.md'
+
+permissions:
+  contents: write
 
 jobs:
   translate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Auto Translate
-        uses: offensive-vk/auto-translate@v1
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          # Archivo origen
-          source_file: 'README.md'
-          # Archivo destino (se creará solo)
-          output_file: 'README.en.md'
-          # Idiomas (en tu caso de Español 'es' a Inglés 'en')
-          source_language: 'es'
-          target_language: 'en'
-          
-      - name: Commit changes
+          python-version: '3.x'
+
+      - name: Install dependencies
         run: |
-          git config --local user.name 'github-actions[bot]'
-          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          pip install deep-translator
+
+      - name: Translate README
+        run: |
+          python - <<'EOF'
+          from deep_translator import GoogleTranslator
+          
+          with open('README.md', 'r', encoding='utf-8') as f:
+              content = f.read()
+          
+          # Traducir en bloques para evitar límites de caracteres
+          translator = GoogleTranslator(source='es', target='en')
+          lines = content.split('\n')
+          translated_lines = []
+          
+          for line in lines:
+              if line.strip() and not line.startswith('```') and not line.startswith('#'):
+                  try:
+                      translated_lines.append(translator.translate(line))
+                  except:
+                      translated_lines.append(line)
+              else:
+                  translated_lines.append(line)
+          
+          translated_content = '\n'.join(translated_lines)
+          
+          with open('README.en.md', 'w', encoding='utf-8') as f:
+              f.write(translated_content)
+          EOF
+
+      - name: Commit translation
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add README.en.md
-          git commit -m "Auto-translated README to English" || echo "No changes to commit"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-translate README to English"
           git push
